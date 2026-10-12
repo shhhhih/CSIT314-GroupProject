@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>IDP Platform</title></head>
+<body>
+  <h1>IDP Platform</h1>
+  <button onclick="callApi()">Test backend</button>
+  <p id="result"></p>
+  <script>
+    function callApi() {
+      fetch('/api/hello')
+        .then(r => r.json())
+        .then(d => document.getElementById('result').textContent = d.message)
+        .catch(e => document.getElementById('result').textContent = 'Failed: ' + e);
+    }
+  </script>
+</body>
+</html>
