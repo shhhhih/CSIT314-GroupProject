@@ -26,10 +26,10 @@ public class UserAccount {
     private String email;
 
     @Column(nullable = false)
-    private String password;   // BCrypt 哈希，不是明文
+    private String password;   
 
     @Column(nullable = false)
-    private Long profileID;    // 对应 UserProfile.profileID
+    private Long profileID;   
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

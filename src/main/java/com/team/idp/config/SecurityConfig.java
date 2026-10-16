@@ -16,9 +16,9 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll()   // 临时:放行所有请求
+                .anyRequest().permitAll()   
             )
-            .csrf(csrf -> csrf.disable());  // 临时:关闭 CSRF
+            .csrf(csrf -> csrf.disable());  
         return http.build();
     }
 
