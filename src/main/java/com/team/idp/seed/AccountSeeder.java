@@ -44,17 +44,17 @@ public class AccountSeeder implements CommandLineRunner {
         Long customerId = profileId("Customer");
         Long platformId = profileId("Platform Manager");
 
-        String password = passwordEncoder.encode("Password123");  // 只加密一次，BCrypt 很慢
-        Random random = new Random(1);                             // 固定种子，每台电脑数据一样
+        String password = passwordEncoder.encode("Password123");  
+        Random random = new Random(1);                             
         List<UserAccount> accounts = new ArrayList<>();
 
-        // 固定的演示账号（Demo 和登录测试用）
+        
         accounts.add(account("admin1", password, adminId, random));
         accounts.add(account("designer1", password, designerId, random));
         accounts.add(account("customer1", password, customerId, random));
         accounts.add(account("platform1", password, platformId, random));
 
-        // 随机批量账号：100 个设计师（对应约 100 间公司）、100 个客户
+        
         for (int i = 1; i <= 100; i++) {
             accounts.add(account(String.format("designer%03d", i), password, designerId, random));
             accounts.add(account(String.format("customer%03d", i), password, customerId, random));
@@ -74,7 +74,7 @@ public class AccountSeeder implements CommandLineRunner {
     private UserAccount account(String username, String password, Long profileId, Random random) {
         UserAccount account = new UserAccount(username, username + "@test.com",
                 password, profileId, AccountStatus.ACTIVE);
-        // 创建时间随机分布在过去 90 天，报表才有数据可看
+       
         account.setCreatedAt(LocalDateTime.now()
                 .minusDays(random.nextInt(90))
                 .minusMinutes(random.nextInt(1440)));
