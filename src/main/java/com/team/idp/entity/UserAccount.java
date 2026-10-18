@@ -68,4 +68,5 @@ public class UserAccount {
     public AccountStatus getAccountStatus() { return accountStatus; }
     public void setAccountStatus(AccountStatus accountStatus) { this.accountStatus = accountStatus; }
     public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }
