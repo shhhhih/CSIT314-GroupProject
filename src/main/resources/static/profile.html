@@ -1,0 +1,669 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Profile | IDP Platform</title>
+
+  <style>
+    :root {
+      --background: #f7f6f2;
+      --white: #ffffff;
+      --primary: #526b5a;
+      --primary-dark: #3d5345;
+      --text: #28312b;
+      --muted: #7d887f;
+      --border: #e5e9e2;
+      --soft-green: #edf2ec;
+      --error: #b42318;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      font-family: "Segoe UI", Arial, sans-serif;
+      min-height: 100vh;
+    }
+
+    /* NAVIGATION */
+    .navbar {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 7%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-family: Georgia, serif;
+      font-size: 26px;
+      font-weight: bold;
+      color: var(--primary-dark);
+      text-decoration: none;
+      letter-spacing: -1px;
+    }
+
+    .logo span {
+      color: #a6b7a5;
+    }
+
+    .nav-label {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* PAGE CONTAINER */
+    .container {
+      max-width: 1040px;
+      margin: 48px auto;
+      padding: 0 24px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      gap: 9px;
+      align-items: center;
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 14px;
+      margin-bottom: 25px;
+      cursor: pointer;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    .page-heading {
+      margin-bottom: 30px;
+    }
+
+    .page-heading h1 {
+      font-family: Georgia, serif;
+      font-size: 38px;
+      font-weight: normal;
+      margin: 0 0 10px;
+    }
+
+    .page-heading p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* PROFILE LAYOUT */
+    .profile-layout {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 5px 25px rgba(30, 50, 30, 0.035);
+    }
+
+    /* LEFT PROFILE CARD */
+    .profile-sidebar {
+      padding: 35px 24px;
+      text-align: center;
+    }
+
+    .avatar {
+      width: 96px;
+      height: 96px;
+      margin: 0 auto 20px;
+      background: var(--soft-green);
+      color: var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Georgia, serif;
+      font-size: 42px;
+    }
+
+    .profile-name {
+      margin: 0 0 8px;
+      font-size: 21px;
+      font-weight: 600;
+      overflow-wrap: anywhere;
+    }
+
+    .profile-role {
+      color: var(--muted);
+      font-size: 14px;
+      margin: 0 0 20px;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 7px 16px;
+      background: var(--soft-green);
+      color: var(--primary-dark);
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .sidebar-divider {
+      border: 0;
+      border-top: 1px solid var(--border);
+      margin: 28px 0;
+    }
+
+    .sidebar-detail {
+      text-align: left;
+    }
+
+    .sidebar-detail small {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .sidebar-detail p {
+      margin: 0;
+      font-size: 14px;
+    }
+
+    /* RIGHT INFORMATION CARD */
+    .profile-content {
+      padding: 34px;
+    }
+
+    .section-heading {
+      margin-bottom: 30px;
+    }
+
+    .section-heading h2 {
+      font-family: Georgia, serif;
+      font-weight: normal;
+      font-size: 25px;
+      margin: 0 0 10px;
+    }
+
+    .section-heading p {
+      font-size: 14px;
+      color: var(--muted);
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 26px 20px;
+    }
+
+    .form-group label {
+      display: block;
+      color: var(--text);
+      font-weight: 600;
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+
+    .form-group input {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: var(--white);
+      padding: 13px 14px;
+      color: var(--text);
+      font-size: 14px;
+      font-family: inherit;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-group input:disabled {
+      background: #f7f8f6;
+      color: #626d65;
+      opacity: 1;
+    }
+
+    .form-group input:not(:disabled):focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(82, 107, 90, 0.12);
+    }
+
+    .section-divider {
+      border: 0;
+      border-top: 1px solid var(--border);
+      margin: 32px 0 25px;
+    }
+
+    /* BUTTONS */
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      padding: 12px 22px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: inherit;
+      transition: background 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-secondary {
+      background: white;
+      border-color: var(--border);
+      color: var(--text);
+    }
+
+    .btn-secondary:hover {
+      background: var(--background);
+    }
+
+    .btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    /* FEEDBACK MESSAGES */
+    #message {
+      margin-bottom: 20px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    #message:empty {
+      display: none;
+    }
+
+    #message.success {
+      background: #edf7f0;
+      color: #236b43;
+      border: 1px solid #c9e7d2;
+      padding: 13px 16px;
+      border-radius: 9px;
+    }
+
+    #message.error {
+      background: #fff1f0;
+      color: var(--error);
+      border: 1px solid #f3cfcb;
+      padding: 13px 16px;
+      border-radius: 9px;
+    }
+
+    /* MOBILE RESPONSIVENESS */
+    @media (max-width: 700px) {
+      .navbar {
+        padding: 18px 6%;
+      }
+
+      .container {
+        margin: 30px auto;
+        padding: 0 16px;
+      }
+
+      .page-heading h1 {
+        font-size: 31px;
+      }
+
+      .profile-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .profile-content {
+        padding: 25px 20px;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .actions .btn {
+        flex: 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="navbar">
+    <a class="logo" href="javascript:history.back()">
+      IDP<span>.</span>
+    </a>
+    <span class="nav-label">Account Settings</span>
+  </header>
+
+  <main class="container">
+
+    <a class="back-link" href="javascript:history.back()">
+      &#8592; Back
+    </a>
+
+    <div class="page-heading">
+      <h1>My Profile</h1>
+      <p>
+        Manage your personal information and keep your account
+        details up to date.
+      </p>
+    </div>
+
+    <p id="message" role="status" aria-live="polite">
+      Loading profile...
+    </p>
+
+    <div class="profile-layout" id="profileLayout" hidden>
+
+      <!-- LEFT: ACCOUNT SUMMARY -->
+      <aside class="card profile-sidebar">
+
+        <div class="avatar" id="avatar">U</div>
+
+        <h2 class="profile-name" id="displayName">Username</h2>
+
+        <p class="profile-role" id="displayRole">Customer</p>
+
+        <span class="status-badge" id="displayStatus">
+          ACTIVE
+        </span>
+
+        <hr class="sidebar-divider">
+
+        <div class="sidebar-detail">
+          <small>Member since</small>
+          <p id="memberSince">-</p>
+        </div>
+
+      </aside>
+
+      <!-- RIGHT: PROFILE DETAILS -->
+      <section class="card profile-content">
+
+        <div class="section-heading">
+          <h2>Personal Information</h2>
+          <p>
+            View and update your account information below.
+          </p>
+        </div>
+
+        <form id="profileForm" hidden>
+
+          <div class="form-grid">
+
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input
+                id="username"
+                name="username"
+                minlength="3"
+                maxlength="50"
+                required
+                disabled
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                maxlength="254"
+                required
+                disabled
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="role">Account Role</label>
+              <input id="role" disabled>
+            </div>
+
+            <div class="form-group">
+              <label for="status">Account Status</label>
+              <input id="status" disabled>
+            </div>
+
+            <div class="form-group">
+              <label for="created">Registration Date</label>
+              <input id="created" disabled>
+            </div>
+
+          </div>
+
+          <hr class="section-divider">
+
+          <div class="actions">
+
+            <button
+              class="btn btn-primary"
+              type="button"
+              id="edit"
+            >
+              Edit Profile
+            </button>
+
+            <button
+              class="btn btn-secondary"
+              type="button"
+              id="cancel"
+              hidden
+            >
+              Cancel
+            </button>
+
+            <button
+              class="btn btn-primary"
+              type="submit"
+              id="save"
+              hidden
+            >
+              Save Changes
+            </button>
+
+          </div>
+
+        </form>
+
+      </section>
+
+    </div>
+
+  </main>
+
+  <script>
+    const form = document.getElementById('profileForm');
+    const message = document.getElementById('message');
+    const layout = document.getElementById('profileLayout');
+
+    const editable = ['username', 'email'];
+
+    const edit = document.getElementById('edit');
+    const save = document.getElementById('save');
+    const cancel = document.getElementById('cancel');
+
+    let original = null;
+
+    function clearMessage() {
+      message.textContent = '';
+      message.className = '';
+    }
+
+    function showMessage(text, type = '') {
+      message.textContent = text;
+      message.className = type;
+    }
+
+    function showProfile(profile) {
+      original = { ...profile };
+
+      editable.forEach(field => {
+        document.getElementById(field).value =
+          profile[field] ?? '';
+      });
+
+      document.getElementById('role').value =
+        profile.role ?? '';
+
+      document.getElementById('status').value =
+        profile.accountStatus ?? '';
+
+      const date = profile.createdAt
+        ? new Date(profile.createdAt).toLocaleDateString()
+        : 'Unknown';
+
+      document.getElementById('created').value = date;
+
+      // Update profile summary
+      document.getElementById('displayName').textContent =
+        profile.username ?? 'User';
+
+      document.getElementById('displayRole').textContent =
+        profile.role ?? 'User';
+
+      document.getElementById('displayStatus').textContent =
+        profile.accountStatus ?? 'Unknown';
+
+      document.getElementById('memberSince').textContent = date;
+
+      document.getElementById('avatar').textContent =
+        (profile.username || 'U').charAt(0).toUpperCase();
+
+      layout.hidden = false;
+      form.hidden = false;
+
+      setEditing(false);
+    }
+
+    function setEditing(isEditing) {
+      editable.forEach(field => {
+        document.getElementById(field).disabled = !isEditing;
+      });
+
+      edit.hidden = isEditing;
+      save.hidden = !isEditing;
+      cancel.hidden = !isEditing;
+    }
+
+    async function loadProfile() {
+      try {
+        const response = await fetch('/api/profile');
+
+        if (response.status === 401) {
+          window.location.href = '/login.html';
+          return;
+        }
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Cannot load profile');
+        }
+
+        showProfile(data);
+        clearMessage();
+
+      } catch (error) {
+        showMessage(error.message, 'error');
+      }
+    }
+
+    edit.addEventListener('click', () => {
+      clearMessage();
+      setEditing(true);
+      document.getElementById('username').focus();
+    });
+
+    cancel.addEventListener('click', () => {
+      showProfile(original);
+      clearMessage();
+    });
+
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+
+      if (!form.reportValidity()) return;
+
+      save.disabled = true;
+      clearMessage();
+
+      try {
+        const response = await fetch('/api/profile', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            username: document.getElementById('username')
+              .value.trim(),
+            email: document.getElementById('email')
+              .value.trim()
+          })
+        });
+
+        if (response.status === 401) {
+          window.location.href = '/login.html';
+          return;
+        }
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            data.message || 'Could not save profile'
+          );
+        }
+
+        showProfile(data);
+
+        showMessage(
+          'Profile changes saved successfully.',
+          'success'
+        );
+
+      } catch (error) {
+        showMessage(error.message, 'error');
+      } finally {
+        save.disabled = false;
+      }
+    });
+
+    loadProfile();
+  </script>
+
+</body>
+</html>
