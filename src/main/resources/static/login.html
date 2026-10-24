@@ -3,35 +3,86 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Log In - IDP Platform</title>
+  <title>Log In | IDP</title>
+  <link rel="stylesheet" href="css/shared.css">
   <style>
-    body { font-family: sans-serif; background: #f4f5f7; margin: 0;
-           display: flex; justify-content: center; padding-top: 80px; }
-    .card { background: #fff; padding: 32px; border-radius: 8px;
-            width: 100%; max-width: 360px; box-shadow: 0 2px 8px rgba(0,0,0,.1); }
-    h1 { margin-top: 0; }
-    label { display: block; margin: 16px 0 6px; font-size: 14px; }
-    input { width: 100%; padding: 10px; box-sizing: border-box;
-            border: 1px solid #ccc; border-radius: 4px; }
-    button { width: 100%; margin-top: 20px; padding: 10px; border: 0;
-             border-radius: 4px; background: #2d6cdf; color: #fff; font-size: 16px; cursor: pointer; }
-    #message { color: #c0392b; min-height: 20px; margin: 12px 0 0; font-size: 14px; }
+    :root{--bg:#f7f6f2;--panel:#fff;--ink:#27332c;--muted:#6b786e;--green:#496652;--green-dark:#304a39;--line:#dfe7df;--soft:#edf3ed;--error:#a92727;--radius:16px}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;display:flex;flex-direction:column}
+    a{color:inherit}
+    button,input{font:inherit}
+    button{cursor:pointer}
+    h1{font-family:Georgia,serif;font-weight:normal;letter-spacing:-.3px;font-size:38px;margin:8px 0}
+    p{line-height:1.65}
+    .muted{color:var(--muted)}
+    .eyebrow{font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:700;color:var(--green)}
+
+    /* Layout */
+    .container{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px 60px}
+    .wrap{width:100%;max-width:420px}
+    .back-link{display:inline-flex;gap:8px;color:var(--green);text-decoration:none;font-size:14px;margin-bottom:16px}
+    .back-link:hover{text-decoration:underline}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:36px;box-shadow:0 5px 20px #14271906}
+    .card-head{margin-bottom:26px}
+    .card-head p{margin:6px 0 0}
+    .page-foot{max-width:1160px;width:100%;margin:auto;padding:18px 24px 30px;color:var(--muted);font-size:12px;text-align:center}
+
+    /* Form */
+    .field{margin-bottom:20px}
+    .field label{display:block;font-weight:600;font-size:13px;margin-bottom:9px}
+    .field input{width:100%;border:1px solid #cdd9ce;background:#fff;padding:12px 13px;border-radius:9px;color:var(--ink)}
+    .field input:focus{outline:2px solid #b1c5b3;outline-offset:1px}
+
+    /* Error message */
+    #message{min-height:20px;margin:0 0 16px;font-size:14px}
+    #message:not(:empty){padding:12px 16px;border-radius:9px;color:var(--error);background:#fff2f1;border:1px solid #edcbca}
+
+    /* Button and links */
+    .btn{display:flex;width:100%;align-items:center;justify-content:center;background:var(--green);color:#fff;border:1px solid var(--green);padding:12px 18px;border-radius:9px;font-weight:600}
+    .btn:hover{background:var(--green-dark)}
+    .switch{text-align:center;margin:20px 0 0;font-size:14px}
+    .switch a{color:var(--green);font-weight:600}
+
+    @media(max-width:760px){.container{padding:25px 16px 40px}h1{font-size:30px}.card{padding:26px 22px}}
   </style>
 </head>
 <body>
-  <main class="card">
-    <h1>Log In</h1>
-    <form id="loginForm" novalidate>
-      <label for="identifier">Username or email</label>
-      <input id="identifier" type="text" autocomplete="username">
+  <!-- Replaced manual header with f2-nav placeholder for guest role -->
+  <div id="f2-nav" data-role="guest"></div>
 
-      <label for="password">Password</label>
-      <input id="password" type="password" autocomplete="current-password">
+  <main class="container">
+    <div class="wrap">
+      <a class="back-link" href="guest-home.html">&larr; Back to browsing</a>
 
-      <p id="message" role="alert"></p>
-      <button type="submit">Log In</button>
-    </form>
+      <section class="card">
+        <div class="card-head">
+          <span class="eyebrow">Welcome back</span>
+          <h1>Log In</h1>
+          <p class="muted">Sign in with your username or email address.</p>
+        </div>
+
+        <form id="loginForm" novalidate>
+          <div class="field">
+            <label for="identifier">Username or email</label>
+            <input id="identifier" type="text" autocomplete="username" placeholder="e.g. customer1">
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <input id="password" type="password" autocomplete="current-password">
+          </div>
+
+          <p id="message" role="alert"></p>
+          <button class="btn" type="submit">Log In</button>
+        </form>
+
+        <p class="switch muted">New here? <a href="customer-register.html">Create an account</a></p>
+      </section>
+    </div>
   </main>
+  <footer class="page-foot">IDP Platform</footer>
+
+  <!-- Load navigation script -->
+  <script src="js/f2-nav.js"></script>
 
   <script>
     const form = document.getElementById('loginForm');
@@ -58,7 +109,7 @@
         const data = await response.json().catch(() => ({}));
 
         if (response.ok) {
-          window.location.href = data.redirectUrl;  
+          window.location.href = data.redirectUrl;
         } else {
           message.textContent = data.message || 'Login failed';
         }
