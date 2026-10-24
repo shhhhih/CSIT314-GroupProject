@@ -59,7 +59,7 @@ Inactive tests: `disabled1` (account DISABLED), `suspended1` (profile SUSPENDED)
 
 ---
 
-## 1. Authentication (US3 [DONE], US4 [TO DO]) – owner B1 / F1
+## 1. Authentication (US3 [DONE], US4 [DONE]) – owner B1 / F1
 
 ### POST `/api/auth/login` [DONE]
 Request
@@ -75,7 +75,7 @@ Errors
 - 401 `Invalid username or password`
 - 403 `Your account is not active. Please contact the administrator.`
 
-### POST `/api/auth/logout` [TO DO] (US4)
+### POST `/api/auth/logout` [DONE] (US4)
 No body. Ends the session.
 200
 ```json
@@ -83,7 +83,7 @@ No body. Ends the session.
 ```
 Works even if already logged out (still 200). Frontend then goes to `/login.html`.
 
-### GET `/api/auth/me` [TO DO]
+### GET `/api/auth/me` [DONE]
 Lets any page know who is logged in (for navbar and role checks).
 200
 ```json
