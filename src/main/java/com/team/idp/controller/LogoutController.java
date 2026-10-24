@@ -1,5 +1,6 @@
 package com.team.idp.controller;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Map;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,10 @@ public class LogoutController {
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
         return ResponseEntity.ok(Map.of("message", "Logged out"));
     }
 }
