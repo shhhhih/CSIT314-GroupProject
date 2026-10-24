@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Category Details | IDP</title>
+  <link rel="stylesheet" href="css/shared.css">
+  <style>
+    :root{--bg:#f7f6f2;--panel:#fff;--ink:#27332c;--muted:#6b786e;--green:#496652;--green-dark:#304a39;--line:#dfe7df;--soft:#edf3ed;--error:#a92727;--radius:16px}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--ink)}
+    a{color:inherit}
+    button{font:inherit;cursor:pointer}
+    h1,h2{font-family:Georgia,serif;font-weight:normal;letter-spacing:-.3px}
+    h1{font-size:38px;margin:8px 0}
+    h2{font-size:25px;margin:0 0 12px}
+    p{line-height:1.65}
+    .muted{color:var(--muted)}
+    .eyebrow{font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:700;color:var(--green)}
+
+    /* Layout */
+    .container{max-width:1160px;margin:40px auto;padding:0 24px 60px}
+    .page-head{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:28px}
+    .page-head p{margin:6px 0}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:26px;box-shadow:0 5px 20px #14271906}
+    .card p:last-child{margin-bottom:0}
+    .back-link{display:inline-flex;gap:8px;color:var(--green);text-decoration:none;font-size:14px;margin-bottom:18px}
+    .back-link:hover{text-decoration:underline}
+    .prewrap{white-space:pre-wrap}
+
+    /* Buttons */
+    .actions{display:flex;gap:10px;flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;justify-content:center;background:var(--green);color:#fff;text-decoration:none;border:1px solid var(--green);padding:12px 18px;border-radius:9px;font-weight:600}
+    .btn:hover{background:var(--green-dark)}
+    .btn.danger{background:#fff;color:var(--error);border-color:#e8c7c7}
+
+    /* IDP count */
+    .stat-label{font-size:13px;color:var(--muted);font-weight:600}
+    .stat{font-size:36px;font-family:Georgia,serif;margin:6px 0}
+
+    @media(max-width:760px){.container{margin:25px auto}.grid{grid-template-columns:1fr}h1{font-size:30px}.card{padding:20px}}
+  </style>
+</head>
+<body>
+  <!-- Replaced manual header with f2-nav placeholder for platform role, highlighting categories -->
+  <div id="f2-nav" data-role="platform" data-active="platform-categories.html"></div>
+
+  <main class="container">
+    <a class="back-link" href="platform-categories.html">&larr; Back to categories</a>
+
+    <header class="page-head">
+      <div>
+        <span class="eyebrow">IDP category</span>
+        <h1 id="categoryName">Category name</h1>
+        <p class="muted" id="createdAt">Created —</p>
+      </div>
+      <div class="actions">
+        <a class="btn" id="editLink" href="platform-category-form.html">Edit</a>
+        <button class="btn danger" type="button" id="deleteBtn">Delete</button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <section class="card">
+        <h2>Description</h2>
+        <p class="prewrap muted" id="description">No description.</p>
+      </section>
+      <section class="card">
+        <span class="stat-label">IDPs using this category</span>
+        <p class="stat" id="idpCount">—</p>
+        <p class="muted">Categories used by existing IDPs cannot be deleted.</p>
+      </section>
+    </div>
+  </main>
+
+  <!-- Load navigation script -->
+  <script src="js/f2-nav.js"></script>
+</body>
+</html>

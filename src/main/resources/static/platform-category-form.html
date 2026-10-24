@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Create Category | IDP</title>
+  <link rel="stylesheet" href="css/shared.css">
+  <style>
+    :root{--bg:#f7f6f2;--panel:#fff;--ink:#27332c;--muted:#6b786e;--green:#496652;--green-dark:#304a39;--line:#dfe7df;--soft:#edf3ed;--radius:16px}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--ink)}
+    a{color:inherit}
+    button,input,textarea{font:inherit}
+    button{cursor:pointer}
+    h1{font-family:Georgia,serif;font-weight:normal;letter-spacing:-.3px;font-size:38px;margin:8px 0}
+    p{line-height:1.65}
+    .muted{color:var(--muted)}
+    .eyebrow{font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:700;color:var(--green)}
+
+    /* Layout */
+    .container{max-width:1160px;margin:40px auto;padding:0 24px 60px}
+    .page-head{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:28px}
+    .page-head p{margin:6px 0}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:26px;box-shadow:0 5px 20px #14271906}
+
+    /* Buttons */
+    .actions{display:flex;gap:10px;flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;justify-content:center;background:var(--green);color:#fff;text-decoration:none;border:1px solid var(--green);padding:12px 18px;border-radius:9px;font-weight:600}
+    .btn:hover{background:var(--green-dark)}
+    .btn.secondary{background:#fff;color:var(--green);border-color:var(--line)}
+    .btn.secondary:hover{background:var(--soft)}
+
+    /* Form */
+    .field{margin-bottom:20px}
+    .field label{display:block;font-weight:600;font-size:13px;margin-bottom:9px}
+    .field input,.field textarea{width:100%;border:1px solid #cdd9ce;background:#fff;padding:12px 13px;border-radius:9px;color:var(--ink)}
+    .field textarea{min-height:130px;resize:vertical}
+    .field input:focus,.field textarea:focus{outline:2px solid #b1c5b3;outline-offset:1px}
+
+    @media(max-width:760px){.container{margin:25px auto}h1{font-size:30px}.card{padding:20px}}
+  </style>
+</head>
+<body>
+  <!-- Replaced manual header with f2-nav placeholder for platform role, highlighting categories -->
+  <div id="f2-nav" data-role="platform" data-active="platform-categories.html"></div>
+
+  <main class="container">
+    <header class="page-head">
+      <div>
+        <span class="eyebrow">Catalogue editor</span>
+        <h1 id="heading">Create a Category</h1>
+        <p class="muted">Categories help designers classify projects and customers find them.</p>
+      </div>
+    </header>
+
+    <section class="card">
+      <form id="categoryForm">
+        <div class="field">
+          <label for="categoryName">Category name</label>
+          <input id="categoryName" name="categoryName" maxlength="100" required placeholder="e.g. Living Room">
+        </div>
+        <div class="field">
+          <label for="description">Description</label>
+          <textarea id="description" name="description" maxlength="1000" placeholder="What kind of projects belong in this category?"></textarea>
+        </div>
+        <div class="actions">
+          <button class="btn" type="submit">Save Category</button>
+          <a class="btn secondary" href="platform-categories.html">Cancel</a>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <!-- Load navigation script -->
+  <script src="js/f2-nav.js"></script>
+</body>
+</html>

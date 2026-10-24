@@ -1,8 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><meta charset="UTF-8"><title>Platform management Home</title></head>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Platform Dashboard | IDP</title>
+  <link rel="stylesheet" href="css/shared.css">
+  <style>
+    :root{--bg:#f7f6f2;--panel:#fff;--ink:#27332c;--muted:#6b786e;--green:#496652;--green-dark:#304a39;--line:#dfe7df;--soft:#edf3ed;--radius:16px}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--ink)}
+    a{color:inherit}
+    button{font:inherit;cursor:pointer}
+    h1,h2{font-family:Georgia,serif;font-weight:normal;letter-spacing:-.3px}
+    h1{font-size:38px;margin:8px 0}
+    h2{font-size:25px;margin:0 0 12px}
+    p{line-height:1.65}
+    .muted{color:var(--muted)}
+    .eyebrow{font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:700;color:var(--green)}
+
+    /* Layout */
+    .container{max-width:1160px;margin:40px auto;padding:0 24px 60px}
+    .page-head{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:28px}
+    .page-head p{margin:6px 0}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:26px;box-shadow:0 5px 20px #14271906}
+    .card p:last-child{margin-bottom:0}
+    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+    .card-link{display:block;text-decoration:none;transition:transform .15s,border-color .15s}
+    .card-link:hover{transform:translateY(-2px);border-color:#a1b6a5}
+    .page-foot{max-width:1160px;margin:auto;padding:18px 24px 30px;color:var(--muted);font-size:12px}
+
+    /* Buttons */
+    .actions{display:flex;gap:10px;flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;justify-content:center;background:var(--green);color:#fff;text-decoration:none;border:1px solid var(--green);padding:12px 18px;border-radius:9px;font-weight:600}
+    .btn:hover{background:var(--green-dark)}
+    .btn.secondary{background:#fff;color:var(--green);border-color:var(--line)}
+    .btn.secondary:hover{background:var(--soft)}
+
+    /* Dashboard totals */
+    .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px;margin-bottom:24px}
+    .stat-card{padding:20px 22px}
+    .stat-label{font-size:13px;color:var(--muted);font-weight:600}
+    .stat{font-size:36px;font-family:Georgia,serif;margin:6px 0 0}
+
+    @media(max-width:760px){.container{margin:25px auto}.grid{grid-template-columns:1fr}h1{font-size:30px}.card{padding:20px}}
+  </style>
+</head>
 <body>
-  <h1>Platform Management Home (placeholder)</h1>
-  <p><a href="/profile.html">View / Edit My Profile</a></p>
+  <!-- Replaced manual header with f2-nav placeholder for platform role -->
+  <div id="f2-nav" data-role="platform"></div>
+
+  <main class="container">
+    <header class="page-head">
+      <div>
+        <span class="eyebrow">Platform overview</span>
+        <h1>Dashboard</h1>
+        <p class="muted">Platform totals at a glance.</p>
+      </div>
+      <div class="actions">
+        <a class="btn" href="platform-reports.html">Generate Daily Report</a>
+      </div>
+    </header>
+
+    <section class="stat-grid" aria-label="Platform totals">
+      <div class="card stat-card"><span class="stat-label">Total users</span><p class="stat" id="totalUsers">—</p></div>
+      <div class="card stat-card"><span class="stat-label">Customers</span><p class="stat" id="totalCustomers">—</p></div>
+      <div class="card stat-card"><span class="stat-label">Interior designers</span><p class="stat" id="totalDesigners">—</p></div>
+      <div class="card stat-card"><span class="stat-label">IDPs</span><p class="stat" id="totalIdps">—</p></div>
+      <div class="card stat-card"><span class="stat-label">IDP views</span><p class="stat" id="totalViews">—</p></div>
+      <div class="card stat-card"><span class="stat-label">Shortlists</span><p class="stat" id="totalShortlists">—</p></div>
+    </section>
+
+    <div class="grid">
+      <a class="card card-link" href="platform-categories.html">
+        <span class="eyebrow">01 / Catalogue</span>
+        <h2>IDP categories &rarr;</h2>
+        <p class="muted">Create, search, update and delete the categories designers use.</p>
+      </a>
+      <a class="card card-link" href="platform-reports.html">
+        <span class="eyebrow">02 / Reports</span>
+        <h2>Activity reports &rarr;</h2>
+        <p class="muted">Daily, weekly and monthly reports with CSV export.</p>
+      </a>
+      <a class="card card-link" href="platform-insights.html">
+        <span class="eyebrow">03 / Insights</span>
+        <h2>Content &amp; growth &rarr;</h2>
+        <p class="muted">Top projects, IDPs per category and new registrations by user type.</p>
+      </a>
+    </div>
+  </main>
+  <footer class="page-foot">IDP Platform · Platform Manager Workspace</footer>
+
+  <!-- Load navigation script -->
+  <script src="js/f2-nav.js"></script>
 </body>
 </html>
