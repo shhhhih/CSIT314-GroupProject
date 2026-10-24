@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Profile | IDP</title>
+  <link rel="stylesheet" href="css/shared.css">
+  <style>
+    :root{--bg:#f7f6f2;--panel:#fff;--ink:#27332c;--muted:#6b786e;--green:#496652;--green-dark:#304a39;--line:#dfe7df;--soft:#edf3ed;--error:#a92727;--radius:16px}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--ink)}
+    a{color:inherit}
+    button,input{font:inherit}
+    button{cursor:pointer}
+    [hidden]{display:none!important}
+    h1,h2{font-family:Georgia,serif;font-weight:normal;letter-spacing:-.3px}
+    h1{font-size:38px;margin:8px 0}
+    h2{font-size:25px;margin:0 0 8px}
+    p{line-height:1.65}
+    .muted{color:var(--muted)}
+    .eyebrow{font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:700;color:var(--green)}
+
+    /* Layout */
+    .container{max-width:1160px;margin:40px auto;padding:0 24px 60px}
+    .page-head{margin-bottom:28px}
+    .page-head p{margin:6px 0}
+    .profile-layout{display:grid;grid-template-columns:280px minmax(0,1fr);gap:24px;align-items:start}
+    .stack{display:grid;gap:24px}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:26px;box-shadow:0 5px 20px #14271906}
+    .section-head{margin-bottom:22px}
+    .section-head p{margin:0;font-size:14px}
+
+    /* Account summary */
+    .summary{text-align:center;padding:34px 24px}
+    .avatar{width:96px;height:96px;margin:0 auto 18px;background:var(--soft);color:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:42px}
+    .summary-name{margin:0 0 6px;font-size:21px;font-weight:600;overflow-wrap:anywhere}
+    .pill{display:inline-block;border-radius:99px;padding:6px 14px;background:var(--soft);color:var(--green-dark);font-size:12px;font-weight:700}
+    .summary hr{border:0;border-top:1px solid var(--line);margin:26px 0}
+    .summary-detail{text-align:left}
+    .summary-detail small{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}
+    .summary-detail p{margin:0 0 14px;font-size:14px}
+
+    /* Forms */
+    .grid.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 20px}
+    .field{margin-bottom:20px}
+    .field label{display:block;font-weight:600;font-size:13px;margin-bottom:9px}
+    .field input{width:100%;border:1px solid #cdd9ce;background:#fff;padding:12px 13px;border-radius:9px;color:var(--ink)}
+    .field input:focus{outline:2px solid #b1c5b3;outline-offset:1px}
+    .field input:disabled{background:#f7f8f6;color:#626d65}
+    .field small{display:block;margin-top:6px;color:var(--muted);font-size:12px}
+
+    /* Messages: add class "error" or "success" and remove hidden */
+    .alert{padding:12px 16px;border-radius:9px;margin:0 0 18px;font-size:14px}
+    .alert.error{color:var(--error);background:#fff2f1;border:1px solid #edcbca}
+    .alert.success{color:#22613f;background:#edf8f0;border:1px solid #c5e5d0}
+
+    /* Buttons */
+    .actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:20px;margin-top:4px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;background:var(--green);color:#fff;text-decoration:none;border:1px solid var(--green);padding:12px 18px;border-radius:9px;font-weight:600}
+    .btn:hover{background:var(--green-dark)}
+    .btn.secondary{background:#fff;color:var(--green);border-color:var(--line)}
+    .btn.secondary:hover{background:var(--soft)}
+
+    @media(max-width:760px){.nav-inner{display:block}.nav-links{margin-top:12px}.container{margin:25px auto}.profile-layout,.grid.two{grid-template-columns:1fr}h1{font-size:30px}.card{padding:20px}}
+  </style>
+</head>
+<body>
+  <!-- Replaced manual header with f2-nav placeholder (highlighting profile.html) -->
+  <div id="f2-nav" data-role="customer" data-active="profile.html"></div>
+
+  <main class="container">
+    <header class="page-head">
+      <span class="eyebrow">Account settings</span>
+      <h1>My Profile</h1>
+      <p class="muted">Keep your contact information and password up to date.</p>
+    </header>
+
+    <div class="profile-layout">
+      <aside class="card summary">
+        <div class="avatar" id="avatar">U</div>
+        <p class="summary-name" id="summaryName">Username</p>
+        <span class="pill" id="accountStatus">ACTIVE</span>
+        <hr>
+        <div class="summary-detail">
+          <small>Account type</small>
+          <p id="role">Customer</p>
+          <small>Member since</small>
+          <p id="memberSince">—</p>
+        </div>
+      </aside>
+
+      <div class="stack">
+        <!-- Contact information -->
+        <section class="card">
+          <div class="section-head">
+            <h2>Contact information</h2>
+            <p class="muted">This is how designers and the platform reach you.</p>
+          </div>
+          <p id="detailsMessage" class="alert" role="status" hidden></p>
+          <form id="detailsForm">
+            <div class="grid two">
+              <div class="field">
+                <label for="username">Username</label>
+                <input id="username" name="username" minlength="3" maxlength="50" autocomplete="username" required>
+                <small>3 to 50 characters.</small>
+              </div>
+              <div class="field">
+                <label for="email">Email address</label>
+                <input id="email" name="email" type="email" maxlength="254" autocomplete="email" required>
+              </div>
+            </div>
+            <div class="actions">
+              <button class="btn secondary" type="reset">Cancel</button>
+              <button class="btn" type="submit">Save Changes</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Change password -->
+        <section class="card">
+          <div class="section-head">
+            <h2>Change password</h2>
+            <p class="muted">Enter your current password, then choose a new one.</p>
+          </div>
+          <p id="passwordMessage" class="alert" role="status" hidden></p>
+          <form id="passwordForm">
+            <div class="field">
+              <label for="currentPassword">Current password</label>
+              <input id="currentPassword" name="currentPassword" type="password" autocomplete="current-password" required>
+            </div>
+            <div class="grid two">
+              <div class="field">
+                <label for="newPassword">New password</label>
+                <input id="newPassword" name="newPassword" type="password" minlength="8" autocomplete="new-password" required>
+                <small>At least 8 characters.</small>
+              </div>
+              <div class="field">
+                <label for="confirmPassword">Confirm new password</label>
+                <input id="confirmPassword" name="confirmPassword" type="password" minlength="8" autocomplete="new-password" required>
+              </div>
+            </div>
+            <div class="actions">
+              <button class="btn secondary" type="reset">Clear</button>
+              <button class="btn" type="submit">Update Password</button>
+            </div>
+          </form>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <!-- Load the navigation script (adjust path if needed) -->
+  <script src="js/f2-nav.js"></script>
+</body>
+</html>
