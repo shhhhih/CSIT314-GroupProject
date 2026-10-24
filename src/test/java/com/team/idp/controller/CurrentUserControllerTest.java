@@ -74,11 +74,15 @@ class CurrentUserControllerTest {
     @Test
     void returns401AndEndsSessionWhenAccountNoLongerExists() {
         when(accountRepository.findById(9L)).thenReturn(Optional.empty());
-        MockHttpServletRequest request = requestWithSession(9L, "Customer");
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("userId", 9L);
+        session.setAttribute("profileName", "Customer");
+        request.setSession(session);
 
         ResponseEntity<?> response = controller.me(request);
 
         assertEquals(401, response.getStatusCode().value());
-        assertTrue(((MockHttpSession) request.getSession(false)).isInvalid());
+        assertTrue(session.isInvalid());
     }
 }
