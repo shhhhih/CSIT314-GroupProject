@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDateTime;
 
 public interface IDPRepository extends JpaRepository<IDP, Long> {
 
@@ -19,5 +20,8 @@ public interface IDPRepository extends JpaRepository<IDP, Long> {
     // Retrieve a specific project belonging to a company
     Optional<IDP> findByIdpIDAndCompanyID(
             Long idpID, Long companyID);
+    
+    long countByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
+    
 }
 
