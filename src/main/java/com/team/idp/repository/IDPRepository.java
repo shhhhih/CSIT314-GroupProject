@@ -20,8 +20,13 @@ public interface IDPRepository extends JpaRepository<IDP, Long> {
     // Retrieve a specific project belonging to a company
     Optional<IDP> findByIdpIDAndCompanyID(
             Long idpID, Long companyID);
-    
-    long countByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
-    
+
+    // Count projects created within a date range
+    long countByCreatedAtBetween(
+            LocalDateTime start, LocalDateTime end);
+
+    // Check whether a category is being used by an IDP
+    boolean existsByCategoryID(Long categoryID);
 }
+
 
