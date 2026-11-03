@@ -11,6 +11,10 @@ import java.time.LocalDateTime;
 
 public interface IDPRepository extends JpaRepository<IDP, Long> {
 
+    long countByCreatedAtGreaterThanEqualAndCreatedAtLessThan(LocalDateTime start, LocalDateTime end);
+
+    boolean existsByCategoryID(Long categoryID);
+
     // Retrieve all projects belonging to a company
     List<IDP> findByCompanyID(Long companyID);
 

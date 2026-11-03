@@ -1,10 +1,12 @@
 package com.team.idp.controller;
 
 import com.team.idp.service.CustomerIDPService;
+import com.team.idp.service.IDPResponseEnricher;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.math.BigDecimal;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,24 +22,34 @@ import org.springframework.web.bind.annotation.RestController;
 public class CustomerIDPController {
 
     private final CustomerIDPService customerIDPService;
+    private final IDPResponseEnricher enricher;
 
-    public CustomerIDPController(CustomerIDPService customerIDPService) {
+    public CustomerIDPController(CustomerIDPService customerIDPService, IDPResponseEnricher enricher) {
         this.customerIDPService = customerIDPService;
+        this.enricher = enricher;
     }
 
     @GetMapping
-    public ResponseEntity<?> searchIDPs(@RequestParam(name = "keyword", required = false) String keyword,
-                                        HttpServletRequest request) {
-        ResponseEntity<?> denied = checkCustomer(request);
-        if (denied != null) return denied;
-        return ResponseEntity.ok(customerIDPService.searchIDPs(keyword));
-    }
+    public ResponseEntity<?> searchIDPs(
+        @RequestParam(name = "keyword", required = false) String keyword,
+        @RequestParam(name = "categoryId", required = false) Long categoryId,
+        @RequestParam(name = "propertyType", required = false) String propertyType,
+        @RequestParam(name = "minBudget", required = false) BigDecimal minBudget,
+        @RequestParam(name = "maxBudget", required = false) BigDecimal maxBudget,
+        HttpServletRequest request) {
+
+    ResponseEntity<?> denied = checkCustomer(request);
+    if (denied != null) return denied;
+
+    return ResponseEntity.ok(customerIDPService.searchIDPsWithFilters(
+            keyword, categoryId, propertyType, minBudget, maxBudget).stream().map(enricher::summary).toList());
+}
 
     @GetMapping("/{idpId}")
     public ResponseEntity<?> viewIDPDetails(@PathVariable("idpId") Long idpId, HttpServletRequest request) {
         ResponseEntity<?> denied = checkCustomer(request);
         if (denied != null) return denied;
-        return ResponseEntity.ok(customerIDPService.viewIDPDetails(idpId, currentUserId(request)));
+        return ResponseEntity.ok(enricher.details(customerIDPService.viewIDPDetails(idpId, currentUserId(request))));
     }
 
     // ---- session helpers (same approach as ProfileController) ----

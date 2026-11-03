@@ -54,6 +54,18 @@
     .pill.quiet{background:#f3f1ea;color:var(--muted)}
 
     @media(max-width:760px){.nav-inner{display:block}.nav-links{margin-top:12px}.container{margin:25px auto}h1{font-size:30px}.card{padding:20px}.idp-card{padding:0}}
+    
+/* Project card button spacing */
+#results .card > .btn {
+    display: inline-flex;
+    width: fit-content;
+    margin-top: 12px;
+}
+
+#results .card > .btn + .btn {
+    margin-top: 10px;
+}
+
   </style>
 </head>
 <body>
@@ -105,6 +117,7 @@
   </main>
 
   <!-- Load the navigation script (adjust path if needed) -->
-  <script src="js/f2-nav.js"></script>
+<script src="js/f2-nav.js"></script>
+<script src="js/customer-search.js"></script>
 </body>
 </html>

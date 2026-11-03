@@ -7,6 +7,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FavouriteRepository extends JpaRepository<Favourite, Long> {
 
+    long countBySavedAtGreaterThanEqualAndSavedAtLessThan(java.time.LocalDateTime start, java.time.LocalDateTime end);
+
+    java.util.Optional<Favourite> findByCustomerIDAndIdpID(Long customerID, Long idpID);
+
+    java.util.List<Favourite> findByIdpID(Long idpID);
+
     /** US17: stop the same customer saving the same IDP twice. */
     boolean existsByCustomerIDAndIdpID(Long customerID, Long idpID);
 

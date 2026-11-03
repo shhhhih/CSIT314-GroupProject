@@ -27,10 +27,13 @@ public class SecurityConfig {
         http
             .addFilterAfter(new SessionRoleFilter(), SecurityContextHolderFilter.class)
             .authorizeHttpRequests(auth -> auth
+                
                 // open to everyone
                 .requestMatchers("/api/auth/**", "/api/hello").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/idps", "/api/idps/*").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/guest/idps").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/idps", "/api/idps/*").hasRole(CUSTOMER)
                 .requestMatchers(HttpMethod.GET, "/api/categories", "/api/categories/*").permitAll()
+
 
                 // Interior Designer: own company, own IDPs
                 .requestMatchers("/api/companies/me", "/api/companies/me/**").hasRole(INTERIOR_DESIGNER)

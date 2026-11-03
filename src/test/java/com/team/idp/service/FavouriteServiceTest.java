@@ -13,6 +13,7 @@ import com.team.idp.dto.FavouriteItemResponse;
 import com.team.idp.dto.FavouriteResponse;
 import com.team.idp.entity.Favourite;
 import com.team.idp.entity.IDP;
+import com.team.idp.repository.CategoryRepository;
 import com.team.idp.repository.FavouriteRepository;
 import com.team.idp.repository.IDPRepository;
 import java.math.BigDecimal;
@@ -35,6 +36,9 @@ class FavouriteServiceTest {
 
     @Mock
     private IDPRepository idpRepository;
+
+    @Mock
+    private CategoryRepository categoryRepository;
 
     @InjectMocks
     private FavouriteService favouriteService;
