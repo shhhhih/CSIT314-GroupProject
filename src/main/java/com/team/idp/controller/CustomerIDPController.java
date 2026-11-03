@@ -30,41 +30,52 @@ public class CustomerIDPController {
     }
 
     @GetMapping
+
     public ResponseEntity<?> searchIDPs(
-        @RequestParam(name = "keyword", required = false) String keyword,
-        @RequestParam(name = "categoryId", required = false) Long categoryId,
-        @RequestParam(name = "propertyType", required = false) String propertyType,
-        @RequestParam(name = "minBudget", required = false) BigDecimal minBudget,
-        @RequestParam(name = "maxBudget", required = false) BigDecimal maxBudget,
-        HttpServletRequest request) {
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "categoryId", required = false) Long categoryId,
+            @RequestParam(name = "propertyType", required = false) String propertyType,
+            @RequestParam(name = "minBudget", required = false) BigDecimal minBudget,
+            @RequestParam(name = "maxBudget", required = false) BigDecimal maxBudget,
+            HttpServletRequest request) {
 
-    ResponseEntity<?> denied = checkCustomer(request);
-    if (denied != null) return denied;
-
-    return ResponseEntity.ok(customerIDPService.searchIDPsWithFilters(
-            keyword, categoryId, propertyType, minBudget, maxBudget).stream().map(enricher::summary).toList());
-}
-
-    @GetMapping("/{idpId}")
-    public ResponseEntity<?> viewIDPDetails(@PathVariable("idpId") Long idpId, HttpServletRequest request) {
         ResponseEntity<?> denied = checkCustomer(request);
         if (denied != null) return denied;
-        return ResponseEntity.ok(enricher.details(customerIDPService.viewIDPDetails(idpId, currentUserId(request))));
+
+        return ResponseEntity.ok(
+                customerIDPService.searchIDPsWithFilters(
+                        keyword,
+                        categoryId,
+                        propertyType,
+                        minBudget,
+                        maxBudget
+                ).stream()
+                 .map(enricher::summary)
+                 .toList()
+        );
+    }
+
+    @GetMapping("/{idpId}")
+    public ResponseEntity<?> viewIDPDetails(
+            @PathVariable("idpId") Long idpId,
+            HttpServletRequest request) {
+
+        ResponseEntity<?> denied = checkCustomer(request);
+        if (denied != null) return denied;
+
+        return ResponseEntity.ok(
+                enricher.details(
+                        customerIDPService.viewIDPDetails(
+                                idpId,
+                                currentUserId(request)
+                        )
+                )
+        );
+    }
+
     }
 
     // ---- session helpers (same approach as ProfileController) ----
-
-    private ResponseEntity<?> checkCustomer(HttpServletRequest request) {
-        if (currentUserId(request) == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Please log in first"));
-        }
-        HttpSession session = request.getSession(false);
-        if (!"Customer".equals(session.getAttribute("profileName"))) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(Map.of("message", "You do not have permission to do this"));
-        }
-        return null;
-    }
 
     private Long currentUserId(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
