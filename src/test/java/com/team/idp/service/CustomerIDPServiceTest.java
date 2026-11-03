@@ -100,6 +100,18 @@ class CustomerIDPServiceTest {
         assertEquals("Warm timber and soft lighting", details.description());
         verify(idpViewRepository).save(any(IdpView.class));
     }
+    
+    @Test
+    void viewIDPDetails_guest_increasesViewCountAndRecordsViewWithoutCustomer() {
+        IDP idp = idp(5L, "Modern Kitchen");
+        when(idpRepository.findById(5L)).thenReturn(Optional.of(idp));
+        when(idpRepository.save(idp)).thenReturn(idp);
+
+        IdpDetailsResponse details = customerIDPService.viewIDPDetails(5L, null);
+
+        assertEquals(1, details.viewCount());
+        verify(idpViewRepository).save(any(IdpView.class));
+    }
 
     @Test
     void viewIDPDetails_missingIDP_throwsNotFound() {

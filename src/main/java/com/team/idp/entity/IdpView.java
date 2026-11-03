@@ -21,7 +21,7 @@ public class IdpView {
     @Column(nullable = false)
     private Long idpID;
 
-    @Column(nullable = false)
+    // null when the viewer is a guest (not logged in)
     private Long customerID;
 
     @Column(nullable = false, updatable = false)
