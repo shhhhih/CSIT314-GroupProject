@@ -1,5 +1,313 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Create Project | IDP</title><link rel="stylesheet" href="css/shared.css"></head><body><div id="f1-nav"></div><main class="container"><header class="page-head"><div><span class="eyebrow">Portfolio editor</span><h1 id="heading">Create a Project</h1><p class="muted">Present your renovation work to potential customers.</p></div></header><p id="notice" class="alert" role="status" hidden></p><section class="card"><form id="idpForm"><div class="grid two"><div class="field"><label for="title">Project title</label><input id="title" name="title" maxlength="150" required></div><div class="field"><label for="category">Category</label><input id="category" name="category" maxlength="100" required><small>Replace this with the shared category API dropdown when ready.</small></div><div class="field"><label for="propertyType">Property type</label><select id="propertyType" name="propertyType" required><option value="">Choose one</option><option>HDB</option><option>Condominium</option><option>Landed</option><option>Commercial</option></select></div><div class="field"><label for="budget">Budget (SGD)</label><input id="budget" name="budget" type="number" min="0" step="0.01" required></div><div class="field"><label for="status">Project status</label><select id="status" name="status"><option value="CURRENT">Current</option><option value="PAST">Past</option></select></div><div class="field"><label for="publicationStatus">Publication</label><select id="publicationStatus" name="publicationStatus"><option value="DRAFT">Draft</option><option value="PUBLISHED">Published</option></select></div></div><div class="field"><label for="description">Description</label><textarea id="description" name="description" maxlength="5000" required></textarea></div><p class="muted">Photo uploading will be connected after B3 confirms the upload endpoint and expected multipart field name.</p><div class="actions"><button class="btn" type="submit" id="submit">Save Project</button><a class="btn secondary" href="designer-idps.html">Cancel</a></div></form></section></main><script src="js/f1-api.js"></script><script src="js/f1-nav.js"></script><script>
-const form=document.getElementById('idpForm'),notice=document.getElementById('notice'),id=new URLSearchParams(location.search).get('id');
-if(id){document.getElementById('heading').textContent='Edit Project';f1Request(f1IdpPath(id)).then(p=>{for(const k of ['title','category','propertyType','budget','status','publicationStatus','description'])if(form.elements[k])form.elements[k].value=p[k]??'';}).catch(e=>f1Alert(notice,e.message));}
-form.addEventListener('submit',async e=>{e.preventDefault();if(!form.reportValidity())return;const btn=document.getElementById('submit');btn.disabled=true;const payload=Object.fromEntries(new FormData(form));payload.budget=Number(payload.budget);try{await f1Request(id?f1IdpPath(id):F1_ENDPOINTS.idps,{method:id?'PUT':'POST',body:JSON.stringify(payload)});location.href='designer-idps.html';}catch(e){f1Alert(notice,e.message);btn.disabled=false;}});
-</script></body></html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Create Project | IDP</title>
+  <link rel="stylesheet" href="css/shared.css">
+</head>
+
+<body>
+  <div id="f1-nav"></div>
+
+  <main class="container">
+    <header class="page-head">
+      <div>
+        <span class="eyebrow">Portfolio editor</span>
+        <h1 id="heading">Create a Project</h1>
+        <p class="muted">
+          Present your renovation work to potential customers.
+        </p>
+      </div>
+    </header>
+
+    <p id="notice" class="alert" role="status" hidden></p>
+
+    <section class="card">
+      <form id="idpForm">
+
+        <div class="grid two">
+          <div class="field">
+            <label for="title">Project title</label>
+            <input id="title" name="title" maxlength="150" required>
+          </div>
+
+          <div class="field">
+            <label for="category">Category</label>
+            <select id="category" name="categoryID" required>
+              <option value="">Select IDP Category</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="propertyType">Property type</label>
+            <select id="propertyType" name="propertyType" required>
+              <option value="">Choose one</option>
+              <option value="HDB">HDB</option>
+              <option value="Condo">Condo</option>
+              <option value="Landed">Landed</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="budget">Budget (SGD)</label>
+            <input
+              id="budget"
+              name="budget"
+              type="number"
+              min="0.01"
+              step="0.01"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label for="status">Project status</label>
+            <select id="status" name="projectStatus" required>
+              <option value="Current">Current</option>
+              <option value="Past">Past</option>
+            </select>
+          </div>
+
+          <div class="field" id="publicationField">
+            <label for="publicationStatus">Publication</label>
+            <select id="publicationStatus" name="publicationStatus">
+              <option value="DRAFT">Draft</option>
+              <option value="PUBLISHED">Published</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="description">Description</label>
+          <textarea
+            id="description"
+            name="description"
+            maxlength="5000"
+            required
+          ></textarea>
+        </div>
+
+        <div class="field" id="imageField">
+          <label for="projectImages">Project images (optional)</label>
+          <input
+            id="projectImages"
+            name="projectImages"
+            type="file"
+            accept=".jpg,.jpeg,.png,image/jpeg,image/png"
+            multiple
+          >
+          <small>Maximum 5 JPG/PNG images, 5 MB each.</small>
+        </div>
+
+        <div class="actions">
+          <button class="btn" type="submit" id="submit">
+            Save Project
+          </button>
+
+          <a class="btn secondary" href="designer-idps.html">
+            Cancel
+          </a>
+        </div>
+
+      </form>
+    </section>
+  </main>
+
+  <script src="js/f1-api.js"></script>
+  <script src="js/f1-nav.js"></script>
+
+  <script>
+    const form = document.getElementById('idpForm');
+    const notice = document.getElementById('notice');
+    const submitButton = document.getElementById('submit');
+    const id = new URLSearchParams(location.search).get('id');
+
+    // Preserve the existing Edit Project workflow.
+    // This route is provisional until the team's edit API is confirmed.
+    if (id) {
+      document.getElementById('heading').textContent = 'Edit Project';
+      document.getElementById('imageField').hidden = true;
+
+      f1Request(f1IdpPath(id))
+        .then(project => {
+          for (const key of [
+            'title',
+            'propertyType',
+            'budget',
+            'publicationStatus',
+            'description'
+          ]) {
+            if (form.elements[key]) {
+              form.elements[key].value = project[key] ?? '';
+            }
+          }
+
+          form.elements.categoryID.value =
+            project.categoryID ?? project.category ?? '';
+
+          form.elements.projectStatus.value =
+            project.projectStatus ?? project.status ?? 'Current';
+        })
+        .catch(error => f1Alert(notice, error.message));
+    } else {
+      // Publication is not part of the tested US6 creation API.
+      document.getElementById('publicationField').hidden = true;
+    }
+
+    // Load available categories from the US6 backend.
+    async function loadCategories() {
+      try {
+        const result = await f1Request(F1_ENDPOINTS.idpCategories);
+
+        const categories = Array.isArray(result)
+          ? result
+          : (result.categories ?? []);
+
+        const select = form.elements.categoryID;
+
+        for (const category of categories) {
+          const option = document.createElement('option');
+          option.value = category.categoryID ?? category.id;
+          option.textContent =
+            category.categoryName ?? category.name;
+          select.appendChild(option);
+        }
+      } catch (error) {
+        f1Alert(notice, error.message);
+      }
+    }
+
+    loadCategories();
+
+    async function uploadImages(files) {
+      if (files.length === 0) {
+        return [];
+      }
+
+      if (files.length > 5) {
+        throw new Error('A maximum of 5 images is allowed.');
+      }
+
+      const allowedTypes = ['image/jpeg', 'image/png'];
+
+      for (const file of files) {
+        if (!allowedTypes.includes(file.type)) {
+          throw new Error('Only JPG and PNG images are allowed.');
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+          throw new Error('Each image must be 5 MB or smaller.');
+        }
+      }
+
+      const data = new FormData();
+
+      for (const file of files) {
+        data.append('files', file);
+      }
+
+      const response = await fetch(F1_ENDPOINTS.idpImages, {
+        method: 'POST',
+        credentials: 'same-origin',
+        body: data
+      });
+
+      if (response.status === 401) {
+        location.href = '/login.html';
+        throw new Error('Please log in again.');
+      }
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          result.message || 'Image upload failed.'
+        );
+      }
+
+      const paths = Array.isArray(result)
+        ? result
+        : (result.imagePaths ?? result.images);
+
+      if (!Array.isArray(paths)) {
+        throw new Error(
+          'Image upload response did not contain image paths.'
+        );
+      }
+
+      return paths;
+    }
+
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+
+      if (!form.reportValidity()) {
+        return;
+      }
+
+      submitButton.disabled = true;
+      f1Alert(notice, '');
+
+      try {
+        if (id) {
+          // Keep the existing edit endpoint and its original payload keys.
+          const editPayload = {
+            title: form.elements.title.value.trim(),
+            category: form.elements.categoryID.value,
+            propertyType: form.elements.propertyType.value,
+            budget: Number(form.elements.budget.value),
+            status: form.elements.projectStatus.value.toUpperCase(),
+            publicationStatus:
+              form.elements.publicationStatus.value,
+            description: form.elements.description.value.trim()
+          };
+
+          await f1Request(f1IdpPath(id), {
+            method: 'PUT',
+            body: JSON.stringify(editPayload)
+          });
+
+          location.href = 'designer-idps.html';
+          return;
+        }
+
+        // US6 Create IDP
+        const selectedFiles =
+          Array.from(form.elements.projectImages.files);
+
+        const imagePaths = await uploadImages(selectedFiles);
+
+        const payload = {
+          categoryID: Number(form.elements.categoryID.value),
+          title: form.elements.title.value.trim(),
+          description: form.elements.description.value.trim(),
+          budget: Number(form.elements.budget.value),
+          propertyType: form.elements.propertyType.value,
+          projectStatus: form.elements.projectStatus.value,
+          images: imagePaths
+        };
+
+        await f1Request(F1_ENDPOINTS.createIdp, {
+          method: 'POST',
+          body: JSON.stringify(payload)
+        });
+
+        f1Alert(
+          notice,
+          'Project created successfully',
+          'success'
+        );
+
+        form.reset();
+
+      } catch (error) {
+        f1Alert(notice, error.message);
+      } finally {
+        submitButton.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
