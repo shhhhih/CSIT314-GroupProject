@@ -56,7 +56,7 @@ class DesignerIDPServiceTest {
     @Test
     void createRequiresCompany() {
         DesignerIdpRequest r = new DesignerIdpRequest("Kitchen","Bright kitchen",
-            new BigDecimal("25000"),"HDB","Published",1L);
+            new BigDecimal("25000"),"HDB","Completed",1L);
         assertThrows(IllegalStateException.class,()->service.create(9L,r));
         verify(idps,never()).save(any());
     }
