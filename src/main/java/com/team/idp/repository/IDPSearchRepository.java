@@ -41,9 +41,12 @@ public interface IDPSearchRepository extends JpaRepository<IDP, Long> {
         @Param("minBudget") java.math.BigDecimal minBudget,
         @Param("maxBudget") java.math.BigDecimal maxBudget);
         
+/**
+ * Customer search: only show Ongoing and Completed projects.
+ */
 @Query("""
     SELECT i FROM IDP i
-    WHERE LOWER(i.projectStatus) = 'published'
+    WHERE LOWER(i.projectStatus) IN ('ongoing', 'completed')
     AND (:keyword IS NULL
          OR LOWER(i.title) LIKE LOWER(CONCAT('%', :keyword, '%'))
          OR LOWER(i.description) LIKE LOWER(CONCAT('%', :keyword, '%'))
@@ -56,10 +59,9 @@ public interface IDPSearchRepository extends JpaRepository<IDP, Long> {
     ORDER BY i.createdAt DESC
     """)
 List<IDP> searchPublishedWithFilters(
-        @Param("keyword") String keyword,
-        @Param("categoryId") Long categoryId,
-        @Param("propertyType") String propertyType,
-        @Param("minBudget") BigDecimal minBudget,
-        @Param("maxBudget") BigDecimal maxBudget);
-
+    @Param("keyword") String keyword,
+    @Param("categoryId") Long categoryId,
+    @Param("propertyType") String propertyType,
+    @Param("minBudget") BigDecimal minBudget,
+    @Param("maxBudget") BigDecimal maxBudget);
 }

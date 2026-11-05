@@ -79,7 +79,18 @@ document.addEventListener("DOMContentLoaded", () => {
         const project = await f1Request(f1IdpPath(id));
         for (const field of ["title", "categoryId", "propertyType", "budget", "projectStatus", "description"]) {
           const input = form.elements.namedItem(field);
-          if (input) input.value = project[field] ?? "";
+          if (input) {
+            let value = project[field] ?? "";
+
+            if (field == "projectStatus") {
+              if (value == "Draft") {
+                value = "Ongoing";
+              } else if (value == "Published") {
+                value = "Completed"
+              }
+            }
+          input.value = value;
+          }
         }
         // Surface an unexpected status rather than overwriting it with Draft.
         const status = form.elements.namedItem("projectStatus");

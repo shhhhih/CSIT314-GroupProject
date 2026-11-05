@@ -70,7 +70,7 @@ public class DesignerIDPService {
             throw new IllegalArgumentException("Budget must be greater than 0 and within range");
         if (r.propertyType() == null || !List.of("HDB", "Condo", "Landed", "Commercial").contains(r.propertyType()))
             throw new IllegalArgumentException("Select a valid property type");
-        if (r.projectStatus() == null || !List.of("Draft", "Published").contains(r.projectStatus()))
+        if (r.projectStatus() == null || !List.of("Ongoing", "Completed").contains(r.projectStatus()))
             throw new IllegalArgumentException("Select a valid publication status");
     }
 
