@@ -120,7 +120,7 @@ class ProfileManagementServiceTest {
 
     @Test
     void updateChangesNameAndDescription() {
-        UserProfile existing = profile("Customer", "old", ProfileStatus.ACTIVE);
+        UserProfile existing = profile("Interior Decorator", "old", ProfileStatus.ACTIVE);
         when(profileRepository.findById(1L)).thenReturn(Optional.of(existing));
         when(profileRepository.findByProfileName("Home Owner")).thenReturn(Optional.empty());
         when(profileRepository.save(any(UserProfile.class))).thenAnswer(inv -> inv.getArgument(0));
@@ -129,6 +129,18 @@ class ProfileManagementServiceTest {
 
         assertEquals("Home Owner", response.profileName());
         assertEquals("new", response.description());
+    }
+
+    @Test
+    void updateRejectsRenamingBuiltInRole() {
+        UserProfile existing = profile("Customer", "old", ProfileStatus.ACTIVE);
+        when(profileRepository.findById(1L)).thenReturn(Optional.of(existing));
+
+        ConflictException error = assertThrows(ConflictException.class,
+                () -> service.update(1L, new UserProfileRequest("Home Owner", "new")));
+
+        assertEquals("Built-in system roles cannot be renamed", error.getMessage());
+        verify(profileRepository, never()).save(any(UserProfile.class));
     }
 
     @Test
@@ -147,14 +159,14 @@ class ProfileManagementServiceTest {
 
     @Test
     void updateRejectsANameUsedByAnotherProfile() {
-        UserProfile existing = profile("Customer", "old", ProfileStatus.ACTIVE);
+        UserProfile existing = profile("Interior Decorator", "old", ProfileStatus.ACTIVE);
         UserProfile other = mock(UserProfile.class);
         when(other.getProfileID()).thenReturn(2L);
         when(profileRepository.findById(1L)).thenReturn(Optional.of(existing));
-        when(profileRepository.findByProfileName("Interior Designer")).thenReturn(Optional.of(other));
+        when(profileRepository.findByProfileName("Home Owner")).thenReturn(Optional.of(other));
 
         assertThrows(ConflictException.class,
-                () -> service.update(1L, new UserProfileRequest("Interior Designer", "x")));
+                () -> service.update(1L, new UserProfileRequest("Home Owner", "x")));
         verify(profileRepository, never()).save(any(UserProfile.class));
     }
 

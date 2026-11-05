@@ -2,8 +2,8 @@
    Only change this file when B1/B2/B3 finalize their contracts. No sample data is persisted. */
 const F1_ENDPOINTS = Object.freeze({
   me:'/api/profile', // confirmed by existing Sprint 1 profile.html
-  logout:'/api/logout', // provisional, check B1 contract
-  company:'/api/designer/company', // provisional, check B2 contract
+  logout:'/api/auth/logout', // provisional, check B1 contract
+  company:'/api/companies/me', // provisional, check B2 contract
   idps:'/api/designer/idps' // provisional, check B3 contract
 });
 async function f1Request(url,options={}) {

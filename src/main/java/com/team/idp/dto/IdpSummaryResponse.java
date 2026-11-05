@@ -16,4 +16,21 @@ public record IdpSummaryResponse(Long idpId, String title, Long categoryId, Stri
                 idp.getPropertyType(), idp.getProjectStatus(), idp.getBudget(),
                 null, idp.getViewCount(), idp.getShortlistCount(), idp.getCreatedAt());
     }
+    
+public static IdpSummaryResponse from(IDP idp, String categoryName) {
+    return new IdpSummaryResponse(
+            idp.getIdpID(),
+            idp.getTitle(),
+            idp.getCategoryID(),
+            categoryName,
+            idp.getPropertyType(),
+            idp.getProjectStatus(),
+            idp.getBudget(),
+            null,
+            idp.getViewCount(),
+            idp.getShortlistCount(),
+            idp.getCreatedAt()
+    );
+}
+
 }

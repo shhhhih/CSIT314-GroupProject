@@ -55,20 +55,51 @@ public class ProfileManagementService {
         return found.stream().map(UserProfileResponse::from).toList();
     }
 
-    @Transactional
-    public UserProfileResponse update(Long profileId, UserProfileRequest request) {
-        UserProfile profile = find(profileId);
-        String name = cleanName(request);
-        String description = cleanDescription(request);
-        profileRepository.findByProfileName(name)
-                .filter(other -> !other.getProfileID().equals(profileId))
-                .ifPresent(other -> {
-                    throw new ConflictException("Profile name already exists");
-                });
-        profile.setProfileName(name);
-        profile.setDescription(description);
-        return UserProfileResponse.from(profileRepository.save(profile));
+    
+@Transactional
+public UserProfileResponse update(
+        Long profileId,
+        UserProfileRequest request) {
+
+    UserProfile profile = find(profileId);
+
+    String name = cleanName(request);
+    String description = cleanDescription(request);
+
+    // Prevent renaming built-in system roles
+    List<String> protectedRoles = List.of(
+            "User Admin",
+            "Customer",
+            "Interior Designer",
+            "Platform Manager"
+    );
+
+    if (protectedRoles.contains(profile.getProfileName())
+            && !profile.getProfileName().equals(name)) {
+
+        throw new ConflictException(
+                "Built-in system roles cannot be renamed"
+        );
     }
+
+    // Prevent duplicate profile names
+    profileRepository.findByProfileName(name)
+            .filter(other ->
+                    !other.getProfileID().equals(profileId))
+            .ifPresent(other -> {
+                throw new ConflictException(
+                        "Profile name already exists"
+                );
+            });
+
+    profile.setProfileName(name);
+    profile.setDescription(description);
+
+    return UserProfileResponse.from(
+            profileRepository.save(profile)
+    );
+}
+
 
     @Transactional
     public UserProfileResponse changeStatus(Long profileId, ProfileStatusRequest request) {

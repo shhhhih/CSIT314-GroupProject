@@ -1,5 +1,68 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Create Project | IDP</title><link rel="stylesheet" href="css/shared.css"></head><body><div id="f1-nav"></div><main class="container"><header class="page-head"><div><span class="eyebrow">Portfolio editor</span><h1 id="heading">Create a Project</h1><p class="muted">Present your renovation work to potential customers.</p></div></header><p id="notice" class="alert" role="status" hidden></p><section class="card"><form id="idpForm"><div class="grid two"><div class="field"><label for="title">Project title</label><input id="title" name="title" maxlength="150" required></div><div class="field"><label for="category">Category</label><input id="category" name="category" maxlength="100" required><small>Replace this with the shared category API dropdown when ready.</small></div><div class="field"><label for="propertyType">Property type</label><select id="propertyType" name="propertyType" required><option value="">Choose one</option><option>HDB</option><option>Condominium</option><option>Landed</option><option>Commercial</option></select></div><div class="field"><label for="budget">Budget (SGD)</label><input id="budget" name="budget" type="number" min="0" step="0.01" required></div><div class="field"><label for="status">Project status</label><select id="status" name="status"><option value="CURRENT">Current</option><option value="PAST">Past</option></select></div><div class="field"><label for="publicationStatus">Publication</label><select id="publicationStatus" name="publicationStatus"><option value="DRAFT">Draft</option><option value="PUBLISHED">Published</option></select></div></div><div class="field"><label for="description">Description</label><textarea id="description" name="description" maxlength="5000" required></textarea></div><p class="muted">Photo uploading will be connected after B3 confirms the upload endpoint and expected multipart field name.</p><div class="actions"><button class="btn" type="submit" id="submit">Save Project</button><a class="btn secondary" href="designer-idps.html">Cancel</a></div></form></section></main><script src="js/f1-api.js"></script><script src="js/f1-nav.js"></script><script>
-const form=document.getElementById('idpForm'),notice=document.getElementById('notice'),id=new URLSearchParams(location.search).get('id');
-if(id){document.getElementById('heading').textContent='Edit Project';f1Request(f1IdpPath(id)).then(p=>{for(const k of ['title','category','propertyType','budget','status','publicationStatus','description'])if(form.elements[k])form.elements[k].value=p[k]??'';}).catch(e=>f1Alert(notice,e.message));}
-form.addEventListener('submit',async e=>{e.preventDefault();if(!form.reportValidity())return;const btn=document.getElementById('submit');btn.disabled=true;const payload=Object.fromEntries(new FormData(form));payload.budget=Number(payload.budget);try{await f1Request(id?f1IdpPath(id):F1_ENDPOINTS.idps,{method:id?'PUT':'POST',body:JSON.stringify(payload)});location.href='designer-idps.html';}catch(e){f1Alert(notice,e.message);btn.disabled=false;}});
-</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Create / Edit Project | IDP</title>
+  <link rel="stylesheet" href="css/shared.css">
+  <style>
+    .photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:16px;margin-top:16px}
+    .photo-card{border:1px solid #dfe7df;border-radius:12px;background:#fff;padding:12px}
+    .photo-card img{width:100%;height:130px;object-fit:cover;border-radius:8px;display:block;margin-bottom:10px}
+    .photo-card .btn{width:100%;margin-top:8px}
+    .photo-card .danger{background:white;color:#a92727;border-color:#e8c7c7}
+    .photo-info{font-size:14px;color:#6b786e;margin-top:8px}
+    .photo-tag{font-size:13px;font-weight:600;color:#496652;margin:8px 0}
+    .photo-card button:disabled{opacity:.6;cursor:not-allowed}
+  </style>
+</head>
+<body>
+  <div id="f1-nav"></div>
+  <main class="container">
+    <header class="page-head">
+      <div><span class="eyebrow">Portfolio editor</span>
+        <h1 id="heading">Create a Project</h1>
+        <p class="muted">Present your renovation work to potential customers.</p>
+      </div>
+    </header>
+    <p id="notice" class="alert" role="status" hidden></p>
+    <section class="card">
+      <form id="idpForm">
+        <div class="grid two">
+          <div class="field"><label for="title">Project title</label>
+            <input id="title" name="title" maxlength="150" required></div>
+          <div class="field"><label for="category">Category</label>
+            <select id="category" name="categoryId" required><option value="">Choose a category</option></select></div>
+          <div class="field"><label for="propertyType">Property type</label>
+            <select id="propertyType" name="propertyType" required>
+              <option value="">Choose one</option><option value="HDB">HDB</option>
+              <option value="Condo">Condominium</option><option value="Landed">Landed</option>
+              <option value="Commercial">Commercial</option>
+            </select></div>
+          <div class="field"><label for="budget">Budget (SGD)</label>
+            <input id="budget" name="budget" type="number" min="0.01" step="0.01" required></div>
+          <div class="field"><label for="projectStatus">Publication</label>
+            <select id="projectStatus" name="projectStatus"><option value="Ongoing">Ongoing</option>
+              <option value="Completed">Completed</option></select></div>
+        </div>
+        <div class="field"><label for="description">Description</label>
+          <textarea id="description" name="description" maxlength="5000" required></textarea></div>
+        <div class="field"><label for="images">Add project photos</label>
+          <input id="images" name="images" type="file" multiple accept="image/png,image/jpeg">
+          <small class="muted">JPG / PNG, maximum 5 MB each. Up to 10 photos per project.</small></div>
+        <div class="actions"><button class="btn" type="submit" id="submit">Save Project</button>
+          <a class="btn secondary" href="designer-idps.html">Cancel</a></div>
+      </form>
+    </section>
+    <section class="card" id="photoManagement" hidden style="margin-top:24px">
+      <h2>Manage Project Photos</h2>
+      <p class="muted">Set your main cover photo or remove an image. To replace a photo, remove it and upload a new one using the form above.</p>
+      <p id="photoCount" class="photo-info"></p>
+      <div id="existingPhotos" class="photo-grid"></div>
+    </section>
+  </main>
+  <script src="js/f1-api.js"></script>
+  <script src="js/f1-nav.js"></script>
+  <script src="js/designer-idp-form.js"></script>
+</body>
+</html>

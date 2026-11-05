@@ -72,8 +72,7 @@
     <header class="page-head">
       <span class="eyebrow">Account settings</span>
       <h1>My Profile</h1>
-      <p class="muted">Keep your contact information and password up to date.</p>
-    </header>
+      <p class="muted">View and manage your personal account information.</p>    </header>
 
     <div class="profile-layout">
       <aside class="card summary">
@@ -88,60 +87,47 @@
           <p id="memberSince">—</p>
         </div>
       </aside>
-
+      
       <div class="stack">
-        <!-- Contact information -->
         <section class="card">
           <div class="section-head">
-            <h2>Contact information</h2>
-            <p class="muted">This is how designers and the platform reach you.</p>
+            <h2>Personal Information</h2>
+            <p class="muted">View and manage your account information.</p>
           </div>
+          
           <p id="detailsMessage" class="alert" role="status" hidden></p>
           <form id="detailsForm">
             <div class="grid two">
               <div class="field">
                 <label for="username">Username</label>
-                <input id="username" name="username" minlength="3" maxlength="50" autocomplete="username" required>
-                <small>3 to 50 characters.</small>
+                <input id="username" name="username" disabled required>
               </div>
+              
               <div class="field">
-                <label for="email">Email address</label>
-                <input id="email" name="email" type="email" maxlength="254" autocomplete="email" required>
+                <label for="email">Email Address</label>
+                <input id="email" name="email" type="email" disabled required>
               </div>
-            </div>
-            <div class="actions">
-              <button class="btn secondary" type="reset">Cancel</button>
-              <button class="btn" type="submit">Save Changes</button>
-            </div>
-          </form>
-        </section>
+              
+              <div class="field">
+                <label for="accountRole">Account Role</label>
+                <input id="accountRole" disabled>
+              </div>
 
-        <!-- Change password -->
-        <section class="card">
-          <div class="section-head">
-            <h2>Change password</h2>
-            <p class="muted">Enter your current password, then choose a new one.</p>
-          </div>
-          <p id="passwordMessage" class="alert" role="status" hidden></p>
-          <form id="passwordForm">
-            <div class="field">
-              <label for="currentPassword">Current password</label>
-              <input id="currentPassword" name="currentPassword" type="password" autocomplete="current-password" required>
-            </div>
-            <div class="grid two">
               <div class="field">
-                <label for="newPassword">New password</label>
-                <input id="newPassword" name="newPassword" type="password" minlength="8" autocomplete="new-password" required>
-                <small>At least 8 characters.</small>
+                <label for="accountStatusField">Account Status</label>
+                <input id="accountStatusField" disabled>
               </div>
+
               <div class="field">
-                <label for="confirmPassword">Confirm new password</label>
-                <input id="confirmPassword" name="confirmPassword" type="password" minlength="8" autocomplete="new-password" required>
+                <label for="registrationDate">Registration Date</label>
+                <input id="registrationDate" disabled>
               </div>
             </div>
+
             <div class="actions">
-              <button class="btn secondary" type="reset">Clear</button>
-              <button class="btn" type="submit">Update Password</button>
+              <button type="button" class="btn" id="editButton">Edit Profile</button>
+              <button type="button" class="btn secondary" id="cancelButton" hidden>Cancel</button>
+              <button type="submit" class="btn" id="saveButton" hidden>Save Changes</button>
             </div>
           </form>
         </section>
@@ -151,5 +137,6 @@
 
   <!-- Load the navigation script (adjust path if needed) -->
   <script src="js/f2-nav.js"></script>
+  <script src="js/customer-profile.js"></script>
 </body>
 </html>
