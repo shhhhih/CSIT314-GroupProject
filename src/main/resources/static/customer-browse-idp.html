@@ -94,16 +94,16 @@
       <div class="field" style="flex:1;min-width:140px">
         <label for="propertyType">Property type</label>
         <select id="propertyType" name="propertyType">
-          <option value="">All types</option><option value="HDB">HDB</option><option value="Condo">Condo</option><option value="Landed">Landed</option>
+          <option value="">All types</option><option value="HDB">HDB</option><option value="Condo">Condominium</option><option value="Landed">Landed</option><option value="Commercial">Commercial</option>
         </select>
       </div>
       <div class="field" style="flex:1;min-width:120px">
         <label for="minBudget">Min budget (S$)</label>
-        <input id="minBudget" name="minBudget" type="number" min="0" step="1000">
+        <input id="minBudget" name="minBudget" type="number" min="100" step="50">
       </div>
       <div class="field" style="flex:1;min-width:120px">
         <label for="maxBudget">Max budget (S$)</label>
-        <input id="maxBudget" name="maxBudget" type="number" min="0" step="1000">
+        <input id="maxBudget" name="maxBudget" type="number" min="100" step="50">
       </div>
       <div class="field"><button class="btn" type="submit">Search</button></div>
       <div class="field"><button class="btn secondary" type="reset">Clear</button></div>
