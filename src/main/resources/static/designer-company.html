@@ -1,5 +1,64 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Company Information | IDP</title><link rel="stylesheet" href="css/shared.css"></head><body><div id="f1-nav"></div><main class="container"><header class="page-head"><div><span class="eyebrow">Your studio</span><h1>Company Information</h1><p class="muted">Help customers learn more about your interior design company.</p></div></header><p id="notice" role="status" class="alert">Loading company information...</p><section class="card"><form id="companyForm"><div class="grid two"><div class="field"><label for="companyName">Company name</label><input id="companyName" name="companyName" maxlength="120" required></div><div class="field"><label for="contact">Contact number</label><input id="contact" name="contact" maxlength="30" required></div><div class="field"><label for="address">Business address</label><input id="address" name="address" maxlength="255" required></div><div class="field"><label for="licenceNumber">Licence number</label><input id="licenceNumber" name="licenceNumber" maxlength="60"></div></div><div class="field"><label for="description">Company description</label><textarea id="description" name="description" maxlength="2000"></textarea></div><div class="actions"><button type="submit" class="btn" id="submit">Save Company Information</button><a href="designer-home.html" class="btn secondary">Back</a></div></form></section></main><script src="js/f1-api.js"></script><script src="js/f1-nav.js"></script><script>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Company Information | IDP</title><link rel="stylesheet" href="css/shared.css">
+
+<style>
+  .company-logo-preview {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    border: 1px solid #dfe7df;
+    border-radius: 12px;
+    padding: 8px;
+    background: #edf3ed;
+  }
+</style>
+</head><body><div id="f1-nav"></div><main class="container"><header class="page-head"><div><span class="eyebrow">Your studio</span><h1>Company Information</h1><p class="muted">Help customers learn more about your interior design company.</p></div></header><p id="notice" role="status" class="alert">Loading company information...</p><section class="card"><form id="companyForm"><div class="grid two"><div class="field"><label for="companyName">Company name</label><input id="companyName" name="companyName" maxlength="120" required></div><div class="field"><label for="phone">Contact number</label><input id="phone" name="phone" maxlength="30" required></div><div class="field"><label for="address">Business address</label><input id="address" name="address" maxlength="255" required></div><div class="field"><label for="email">Email address</label><input id="email" name="email" type="email" required></div></div><div class="field"><label for="description">Company description</label><textarea id="description" name="description" maxlength="2000"></textarea></div><div class="field"><label for="website">Website (optional)</label><input id="website" name="website"></div>
+<div class="field"><label for="logo">Company logo (optional JPG/PNG)</label>
+
+<div class="field">
+  <label>Current Company Logo</label>
+
+  <img
+    id="companyLogoPreview"
+    class="company-logo-preview"
+    alt="Company logo"
+    hidden
+  >
+
+  <p id="logoStatus" class="muted">
+    No logo uploaded yet.
+  </p>
+</div>
+<input id="logo" name="logo" type="file" accept="image/jpeg,image/png"></div><div class="actions"><button type="submit" class="btn" id="submit">Save Company Information</button><a href="designer-home.html" class="btn secondary">Back</a></div></form></section></main><script src="js/f1-api.js"></script><script src="js/f1-nav.js"></script><script>
 const companyForm=document.getElementById('companyForm');const notice=document.getElementById('notice');let companyExists=false;
-(async()=>{try{const c=await f1Request(F1_ENDPOINTS.company);companyExists=true;for(const name of ['companyName','contact','address','licenceNumber','description'])companyForm.elements[name].value=c[name]??'';f1Alert(notice,'Company information loaded.','success');}catch(err){f1Alert(notice,err.message+' If no company exists yet, this form can create it once B2 confirms the API.');}})();
-companyForm.addEventListener('submit',async e=>{e.preventDefault();if(!companyForm.reportValidity())return;const btn=document.getElementById('submit');btn.disabled=true;const body=Object.fromEntries(new FormData(companyForm));try{await f1Request(F1_ENDPOINTS.company,{method:companyExists?'PUT':'POST',body:JSON.stringify(body)});companyExists=true;f1Alert(notice,'Company information saved.','success');}catch(err){f1Alert(notice,err.message);}finally{btn.disabled=false;}});
+
+const logoPreview = document.getElementById("companyLogoPreview");
+const logoStatus = document.getElementById("logoStatus");
+
+function showCompanyLogo(path) {
+    if (!path) {
+        logoPreview.hidden = true;
+        logoStatus.textContent = "No logo uploaded yet.";
+        return;
+    }
+
+    const normalized = String(path)
+        .replace(/\\/g, "/")
+        .replace(/^\/+/, "");
+
+    const imageUrl = "/" + normalized;
+
+    logoPreview.src = imageUrl + "?v=" + Date.now();
+    logoPreview.hidden = false;
+    logoStatus.textContent = "Current company logo";
+}
+
+(async()=>{try{const c=await f1Request(F1_ENDPOINTS.company);
+companyExists=true;
+showCompanyLogo(c.logoPath);
+for(const name of ['companyName','email','phone','address','description','website'])
+companyForm.elements[name].value=c[name]??'';f1Alert(notice,'Company information loaded.','success');}catch(err){f1Alert(notice,err.message+' If no company exists yet, this form can create it once B2 confirms the API.');}})();
+companyForm.addEventListener('submit',async e=>{e.preventDefault();if(!companyForm.reportValidity())return;const btn=document.getElementById('submit');btn.disabled=true;const body=Object.fromEntries(new FormData(companyForm));delete body.logo;try{await f1Request(companyExists?F1_ENDPOINTS.company:'/api/companies',{method:companyExists?'PUT':'POST',body:JSON.stringify(body)});companyExists=true;const logo=companyForm.elements.logo.files[0];if(logo){const payload=new FormData();payload.append('file',logo);const uploaded=await fetch('/api/companies/me/logo',{method:'POST',credentials:'same-origin',body:payload});if(!uploaded.ok){const error=await uploaded.json().catch(()=>({}))
+const updatedCompany = await f1Request(F1_ENDPOINTS.company);
+showCompanyLogo(updatedCompany.logoPath);
+ ;throw new Error(error.message||'Company saved, but logo upload failed');}}f1Alert(notice,'Company information saved.','success');}catch(err){f1Alert(notice,err.message);}finally{btn.disabled=false;}});
 </script></body></html>

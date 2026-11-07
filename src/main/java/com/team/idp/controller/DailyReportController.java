@@ -3,6 +3,7 @@ package com.team.idp.controller;
 import com.team.idp.dto.DailyReportResponse;
 import com.team.idp.service.DailyReportService;
 import java.time.LocalDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +22,7 @@ public class DailyReportController {
 
     @GetMapping("/daily")
     public DailyReportResponse generateDailyReport(
-            @RequestParam LocalDate date) {
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 
         return dailyReportService.generateDailyReport(date);
     }
