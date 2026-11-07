@@ -65,7 +65,7 @@ public class CategoryService {
         if (category == null) {
             throw new IllegalArgumentException("Category not found");
         }
-        if (idpRepository.existsById(id)) {
+        if (idpRepository.existsByCategoryID(id)) {
             throw new IllegalArgumentException("Category cannot be deleted because it is being used by an IDP");
         }
 

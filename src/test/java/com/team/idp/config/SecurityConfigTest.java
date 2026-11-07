@@ -42,9 +42,10 @@ class SecurityConfigTest {
     }
 
     @Test
-    void guestCanSearchAndViewIdps() throws Exception {
-        mvc.perform(get("/api/idps")).andExpect(allowed());
-        mvc.perform(get("/api/idps/5")).andExpect(allowed());
+    void guestCanSearchButNotUseCustomerIdps() throws Exception {
+        mvc.perform(get("/api/guest/idps")).andExpect(allowed());
+        mvc.perform(get("/api/idps")).andExpect(status().isUnauthorized());
+        mvc.perform(get("/api/idps/5")).andExpect(status().isUnauthorized());
         mvc.perform(get("/api/categories")).andExpect(allowed());
         mvc.perform(get("/api/companies/3")).andExpect(allowed());
     }

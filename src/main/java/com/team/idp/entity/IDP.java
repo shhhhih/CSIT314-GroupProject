@@ -21,6 +21,9 @@ public class IDP {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idpID;
 
+    @Column
+    private String coverImage;
+
     @Column(nullable = false)
     private Long companyID;
 

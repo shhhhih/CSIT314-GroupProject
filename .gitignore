@@ -34,3 +34,6 @@ build/
 
 ### Uploaded files ###
 uploads/
+
+# Local implementation notes
+IMPLEMENTATION_NOTES.md
