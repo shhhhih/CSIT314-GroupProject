@@ -46,7 +46,7 @@ public interface IDPSearchRepository extends JpaRepository<IDP, Long> {
  */
 @Query("""
     SELECT i FROM IDP i
-    WHERE LOWER(i.projectStatus) IN ('ongoing', 'completed')
+    WHERE LOWER(i.projectStatus) IN ('published','ongoing', 'completed')
     AND (:keyword IS NULL
          OR LOWER(i.title) LIKE LOWER(CONCAT('%', :keyword, '%'))
          OR LOWER(i.description) LIKE LOWER(CONCAT('%', :keyword, '%'))
