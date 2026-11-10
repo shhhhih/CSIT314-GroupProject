@@ -85,8 +85,9 @@ document.addEventListener("DOMContentLoaded", () => {
             if (field == "projectStatus") {
               if (value == "Draft") {
                 value = "Ongoing";
-              } else if (value == "Published") {
-                value = "Completed"
+              } else if (value == "Completed") {
+                // Older projects saved as "Completed" are shown as "Published".
+                value = "Published";
               }
             }
           input.value = value;

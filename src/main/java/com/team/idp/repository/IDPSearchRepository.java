@@ -42,7 +42,7 @@ public interface IDPSearchRepository extends JpaRepository<IDP, Long> {
         @Param("maxBudget") java.math.BigDecimal maxBudget);
         
 /**
- * Customer search: only show Ongoing and Completed projects.
+ * Customer search: show Published and Ongoing projects (and older Completed ones).
  */
 @Query("""
     SELECT i FROM IDP i

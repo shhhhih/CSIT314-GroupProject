@@ -56,8 +56,19 @@ class DesignerIDPServiceTest {
     @Test
     void createRequiresCompany() {
         DesignerIdpRequest r = new DesignerIdpRequest("Kitchen","Bright kitchen",
-            new BigDecimal("25000"),"HDB","Completed",1L);
+            new BigDecimal("25000"),"HDB","Published",1L);
         assertThrows(IllegalStateException.class,()->service.create(9L,r));
+        verify(idps,never()).save(any());
+    }
+
+    @Test
+    void acceptsPublishedAndOngoingButRejectsCompleted() {
+        DesignerIdpRequest completed = new DesignerIdpRequest("Kitchen","Bright kitchen",
+            new BigDecimal("25000"),"HDB","Completed",1L);
+        assertThrows(IllegalArgumentException.class,()->service.create(9L,completed));
+        DesignerIdpRequest ongoing = new DesignerIdpRequest("Kitchen","Bright kitchen",
+            new BigDecimal("25000"),"HDB","Ongoing",1L);
+        assertThrows(IllegalStateException.class,()->service.create(9L,ongoing));
         verify(idps,never()).save(any());
     }
 
